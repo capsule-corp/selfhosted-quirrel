@@ -1,0 +1,28 @@
+app = "quirrel"
+
+[build]
+  image = "ghcr.io/quirrel-dev/quirrel:main"
+
+[[services]]
+  internal_port = 9181
+  protocol = "tcp"
+
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.http_checks]]
+    interval = "10s"
+    method = "get"
+    path = "/health"
+    protocol = "http"
+    timeout = "2s"
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
